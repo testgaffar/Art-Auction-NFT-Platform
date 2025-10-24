@@ -266,9 +266,7 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         emit AuctionCancelled(auction.seller, auction.tokenId);
     }
     
-    /**
-     * @dev Get auction details
-     */
+    
     function getAuctionDetails() external view returns (
         address seller,
         address nftContract,
@@ -336,4 +334,5 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         }
         return auction.highestBid >= auction.reservePrice;
     }
+
 }
