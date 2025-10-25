@@ -137,9 +137,7 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         );
     }
     
-    /**
-     * @dev Place a bid on the auction
-     */
+   
     function placeBid() external payable nonReentrant {
         require(auction.state == AuctionState.Active, "Auction is not active");
         require(block.timestamp < auction.endTime, "Auction has ended");
@@ -336,3 +334,4 @@ contract NFTAuction is ReentrancyGuard, Ownable {
     }
 
 }
+
