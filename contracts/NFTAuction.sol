@@ -21,7 +21,7 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         Cancelled
     }
     
-    // Auction structure
+    // Auction structur
     struct Auction {
         address seller;
         address nftContract;
@@ -334,4 +334,5 @@ contract NFTAuction is ReentrancyGuard, Ownable {
     }
 
 }
+
 
