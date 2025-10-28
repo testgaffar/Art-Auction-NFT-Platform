@@ -79,7 +79,7 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         uint256 amount
     );
     
-    /**
+    /*
      * @dev Create a new auction
      * @param _nftContract Address of the NFT contract
      * @param _tokenId Token ID of the NFT
@@ -334,5 +334,6 @@ contract NFTAuction is ReentrancyGuard, Ownable {
     }
 
 }
+
 
 
