@@ -182,6 +182,90 @@ Art-Auction-NFT-Platform/
 - Batch minting for artists
 - Buy now option (fixed price)
 - Auction extensions (if bid in last minutes)
+- 
+## deploy logs in remix 
+
+[block:9504398 txIndex:-]from: 0xd37...e5b2bto: NFTAuction.(constructor)value: 0 weidata: 0x608...15180logs: 2hash: 0x1a3...dd5c5
+status	0x1 Transaction mined and execution succeed
+transaction hash	0x88b5ae4266581f1298fbd7a1f45e83c2ff955c674e375d837cef4f291c9f760f
+block hash	0x1a3524dfbdada8a6e7058fe7e9093091c33ff3ca9b7ae9d8117d748d082dd5c5
+block number	9504398
+contract address	0x70eb443cc5347982fac62fc19ea388c82d7aaceb
+from	0xd3761B4E38C09119266Ce2d74868a80e3c3e5B2b
+to	NFTAuction.(constructor)
+gas	2567991 gas
+transaction cost	2546613 gas 
+input	0x608...15180
+decoded input	{
+	"address _nftContract": "0xa124bEec76eB93640ac0af73F5713e107dd285db",
+	"uint256 _tokenId": "1",
+	"uint256 _startingPrice": "1000000000000000000",
+	"uint256 _reservePrice": "2000000000000000000",
+	"uint256 _minBidIncrement": "100000000000000000",
+	"uint256 _duration": "86400"
+}
+decoded output	 - 
+logs	[
+	{
+		"from": "0x70eb443cc5347982fac62fc19ea388c82d7aaceb",
+		"topic": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+		"event": "OwnershipTransferred",
+		"args": {
+			"0": "0x0000000000000000000000000000000000000000",
+			"1": "0xd3761B4E38C09119266Ce2d74868a80e3c3e5B2b"
+		}
+	},
+	{
+		"from": "0x70eb443cc5347982fac62fc19ea388c82d7aaceb",
+		"topic": "0x3b7b4c5af27f2d215ab04ff752eb66d4d2500c6584590ed58288a4275196886d",
+		"event": "AuctionCreated",
+		"args": {
+			"0": "0xd3761B4E38C09119266Ce2d74868a80e3c3e5B2b",
+			"1": "0xa124bEec76eB93640ac0af73F5713e107dd285db",
+			"2": "1",
+			"3": "1000000000000000000",
+			"4": "2000000000000000000",
+			"5": "1761828968"
+		}
+	}
+]
+raw logs	[
+  {
+    "address": "0x70eb443cc5347982fac62fc19ea388c82d7aaceb",
+    "topics": [
+      "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "0x000000000000000000000000d3761b4e38c09119266ce2d74868a80e3c3e5b2b"
+    ],
+    "data": "0x",
+    "blockNumber": "0x91068e",
+    "transactionHash": "0x88b5ae4266581f1298fbd7a1f45e83c2ff955c674e375d837cef4f291c9f760f",
+    "transactionIndex": "0x0",
+    "blockHash": "0x1a3524dfbdada8a6e7058fe7e9093091c33ff3ca9b7ae9d8117d748d082dd5c5",
+    "logIndex": "0x0",
+    "removed": false
+  },
+  {
+    "address": "0x70eb443cc5347982fac62fc19ea388c82d7aaceb",
+    "topics": [
+      "0x3b7b4c5af27f2d215ab04ff752eb66d4d2500c6584590ed58288a4275196886d",
+      "0x000000000000000000000000d3761b4e38c09119266ce2d74868a80e3c3e5b2b",
+      "0x000000000000000000000000a124beec76eb93640ac0af73f5713e107dd285db",
+      "0x0000000000000000000000000000000000000000000000000000000000000001"
+    ],
+    "data": "0x0000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000001bc16d674ec800000000000000000000000000000000000000000000000000000000000069036068",
+    "blockNumber": "0x91068e",
+    "transactionHash": "0x88b5ae4266581f1298fbd7a1f45e83c2ff955c674e375d837cef4f291c9f760f",
+    "transactionIndex": "0x0",
+    "blockHash": "0x1a3524dfbdada8a6e7058fe7e9093091c33ff3ca9b7ae9d8117d748d082dd5c5",
+    "logIndex": "0x1",
+    "removed": false
+  }
+]
+Verification process started...
+Verifying with Sourcify...
+Sourcify verification successful.
+https://repo.sourcify.dev/1114/0x70eb443cc5347982Fac62Fc19eA388c82d7aACEb/
 
 ## License
 
