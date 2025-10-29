@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /**
  * @title NFTAuction
  * @dev Manages individual NFT auctions with bidding, refunds, and automatic transfers
+ * FIXED VERSION: Transfers NFT after deployment, not in constructor
  */
 contract NFTAuction is ReentrancyGuard, Ownable {
     
@@ -21,7 +22,7 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         Cancelled
     }
     
-    // Auction structur
+    // Auction structure
     struct Auction {
         address seller;
         address nftContract;
@@ -57,6 +58,11 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         uint256 endTime
     );
     
+    event AuctionStarted(
+        address indexed seller,
+        uint256 indexed tokenId
+    );
+    
     event BidPlaced(
         address indexed bidder,
         uint256 amount,
@@ -79,7 +85,7 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         uint256 amount
     );
     
-    /*
+    /**
      * @dev Create a new auction
      * @param _nftContract Address of the NFT contract
      * @param _tokenId Token ID of the NFT
@@ -99,19 +105,14 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         require(_nftContract != address(0), "Invalid NFT contract");
         require(_startingPrice > 0, "Starting price must be greater than 0");
         require(_minBidIncrement > 0, "Min bid increment must be greater than 0");
-        require(_duration >= 1 hours, "Duration must be at least 1 hour");
+        require(_duration >= 3600, "Duration must be at least 1 hour");
         require(_duration <= 30 days, "Duration cannot exceed 30 days");
         
         if (_reservePrice > 0) {
             require(_reservePrice >= _startingPrice, "Reserve must be >= starting price");
         }
         
-        // Transfer NFT from seller to contract
-        IERC721 nft = IERC721(_nftContract);
-        require(nft.ownerOf(_tokenId) == msg.sender, "Caller is not NFT owner");
-        nft.transferFrom(msg.sender, address(this), _tokenId);
-        
-        // Initialize auction
+        // Initialize auction in Created state (not Active yet)
         auction = Auction({
             seller: msg.sender,
             nftContract: _nftContract,
@@ -123,7 +124,7 @@ contract NFTAuction is ReentrancyGuard, Ownable {
             endTime: block.timestamp + _duration,
             highestBidder: address(0),
             highestBid: 0,
-            state: AuctionState.Active,
+            state: AuctionState.Created,
             finalized: false
         });
         
@@ -137,7 +138,28 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         );
     }
     
-   
+    /**
+     * @dev Start the auction by transferring NFT to contract
+     * Must be called after approving this contract to transfer the NFT
+     */
+    function startAuction() external nonReentrant {
+        require(msg.sender == auction.seller, "Only seller can start");
+        require(auction.state == AuctionState.Created, "Auction already started");
+        
+        // Transfer NFT from seller to contract
+        IERC721 nft = IERC721(auction.nftContract);
+        require(nft.ownerOf(auction.tokenId) == msg.sender, "Caller is not NFT owner");
+        nft.transferFrom(msg.sender, address(this), auction.tokenId);
+        
+        // Activate the auction
+        auction.state = AuctionState.Active;
+        
+        emit AuctionStarted(msg.sender, auction.tokenId);
+    }
+    
+    /**
+     * @dev Place a bid on the auction
+     */
     function placeBid() external payable nonReentrant {
         require(auction.state == AuctionState.Active, "Auction is not active");
         require(block.timestamp < auction.endTime, "Auction has ended");
@@ -243,28 +265,35 @@ contract NFTAuction is ReentrancyGuard, Ownable {
     }
     
     /**
-     * @dev Cancel auction before any bids are placed
+     * @dev Cancel auction before it starts or before any bids are placed
      */
     function cancelAuction() external nonReentrant {
         require(msg.sender == auction.seller, "Only seller can cancel");
-        require(auction.state == AuctionState.Active, "Auction is not active");
+        require(
+            auction.state == AuctionState.Created || auction.state == AuctionState.Active,
+            "Auction cannot be cancelled"
+        );
         require(auction.highestBidder == address(0), "Cannot cancel after bids placed");
         require(!auction.finalized, "Auction already finalized");
         
         auction.state = AuctionState.Cancelled;
         auction.finalized = true;
         
-        // Return NFT to seller
-        IERC721(auction.nftContract).transferFrom(
-            address(this),
-            auction.seller,
-            auction.tokenId
-        );
+        // Return NFT to seller if it was transferred
+        if (auction.state == AuctionState.Active) {
+            IERC721(auction.nftContract).transferFrom(
+                address(this),
+                auction.seller,
+                auction.tokenId
+            );
+        }
         
         emit AuctionCancelled(auction.seller, auction.tokenId);
     }
     
-    
+    /**
+     * @dev Get auction details
+     */
     function getAuctionDetails() external view returns (
         address seller,
         address nftContract,
@@ -332,8 +361,4 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         }
         return auction.highestBid >= auction.reservePrice;
     }
-
 }
-
-
-
