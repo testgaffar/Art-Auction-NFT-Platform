@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-/**
+/*
  * @title NFTAuction
  * @dev Manages individual NFT auctions with bidding, refunds, and automatic transfers
  * FIXED VERSION: Transfers NFT after deployment, not in constructor
@@ -362,3 +362,4 @@ contract NFTAuction is ReentrancyGuard, Ownable {
         return auction.highestBid >= auction.reservePrice;
     }
 }
+
